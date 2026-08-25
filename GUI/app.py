@@ -34,8 +34,9 @@ st.markdown(
     .stTabs [data-baseweb='tab']{color:var(--muted);font-weight:700;padding:.65rem 1.2rem}.stTabs [aria-selected='true']{background:var(--panel2);color:var(--blue);border-radius:6px}
     .section{font:700 1.1rem 'Space Grotesk',sans-serif;color:var(--orange);border-left:5px solid var(--blue);border-bottom:1px solid var(--line);padding:.45rem .7rem;margin:1.2rem 0 .8rem;background:#eaf5fb}
     .stSlider{padding-top:0}.stSlider [data-baseweb='slider'] div{background-color:var(--blue)}
-    .stButton>button{background:var(--blue);color:#ffffff;border:0;border-radius:6px;font:700 1rem 'Space Grotesk',sans-serif;min-height:2.9rem;box-shadow:0 6px 14px #146fae33}
-    .stButton>button:hover{background:#0b4776;color:#ffffff}.calculate-wrap{text-align:center;margin:1.7rem auto 1.3rem;max-width:340px}
+    .stButton>button{background:var(--blue);color:#ffffff!important;border:1px solid #0b4776;border-radius:6px;font:700 1rem 'Space Grotesk',sans-serif;min-height:2.9rem;box-shadow:0 6px 14px #146fae33;letter-spacing:.01em}
+    .stButton>button:hover{background:#0b4776;color:#ffffff!important}.stButton>button span,.stButton>button div,.stButton>button p{color:#ffffff!important}
+    .calculate-wrap{text-align:center;margin:1.7rem auto 1.3rem;max-width:340px}
     .result{background:var(--panel);border:1px solid var(--line);border-top:4px solid var(--blue);border-radius:7px;padding:1rem;text-align:center;min-height:245px;box-shadow:0 8px 20px #146fae18}
     .result .model{color:var(--blue);font:700 .82rem 'Space Grotesk',sans-serif;letter-spacing:.12em;text-transform:uppercase}.result .label{color:var(--muted);margin:.55rem 0 .2rem}.result .number{font:700 1.65rem 'Space Grotesk',sans-serif;color:var(--orange)}
     .interval{border-radius:5px;padding:.45rem .35rem;margin-top:.7rem;font-size:.85rem;color:var(--text)}.interval span{display:block;color:var(--muted);font-size:.72rem;margin-bottom:.15rem}.pi90{background:#dceefa}.pi95{background:#edf3f7}.width-note{color:var(--muted);font-size:.72rem;margin-top:.65rem}
