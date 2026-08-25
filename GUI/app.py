@@ -136,24 +136,30 @@ with tab_predictor:
                     st.session_state[manual_key] = float(np.clip(default, low, high))
                 if slider_key not in st.session_state:
                     st.session_state[slider_key] = st.session_state[manual_key]
-                st.number_input(
-                    feature,
-                    min_value=low,
-                    max_value=high,
-                    key=manual_key,
-                    format="%.6g",
-                    on_change=sync_input,
-                    args=(manual_key, slider_key),
-                )
-                st.slider(
-                    feature,
-                    min_value=low,
-                    max_value=high,
-                    key=slider_key,
-                    on_change=sync_input,
-                    args=(slider_key, manual_key),
-                    help=f"Validated range: {low:g} to {high:g}",
-                )
+                st.markdown(f"<div style='margin-top:0.6rem; margin-bottom:0.35rem; color:var(--text); font-weight:700; font-size:0.96rem;'>{feature}</div>", unsafe_allow_html=True)
+                input_col, slider_col = st.columns([1, 3])
+                with input_col:
+                    st.number_input(
+                        "",
+                        min_value=low,
+                        max_value=high,
+                        key=manual_key,
+                        format="%.6g",
+                        on_change=sync_input,
+                        args=(manual_key, slider_key),
+                        label_visibility="collapsed",
+                    )
+                with slider_col:
+                    st.slider(
+                        "",
+                        min_value=low,
+                        max_value=high,
+                        key=slider_key,
+                        on_change=sync_input,
+                        args=(slider_key, manual_key),
+                        help=f"Validated range: {low:g} to {high:g}",
+                        label_visibility="collapsed",
+                    )
                 values[feature] = float(st.session_state[manual_key])
 
     with st.container():
