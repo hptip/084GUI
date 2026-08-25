@@ -39,11 +39,14 @@ st.markdown(
     .result{background:var(--panel);border:1px solid var(--line);border-top:4px solid var(--blue);border-radius:7px;padding:1rem;text-align:center;min-height:245px;box-shadow:0 8px 20px #146fae18}
     .result .model{color:var(--blue);font:700 .82rem 'Space Grotesk',sans-serif;letter-spacing:.12em;text-transform:uppercase}.result .label{color:var(--muted);margin:.55rem 0 .2rem}.result .number{font:700 1.65rem 'Space Grotesk',sans-serif;color:var(--orange)}
     .interval{border-radius:5px;padding:.45rem .35rem;margin-top:.7rem;font-size:.85rem;color:var(--text)}.interval span{display:block;color:var(--muted);font-size:.72rem;margin-bottom:.15rem}.pi90{background:#dceefa}.pi95{background:#edf3f7}.width-note{color:var(--muted);font-size:.72rem;margin-top:.65rem}
-    [data-testid='stNumberInput'] input{border:1px solid var(--line);border-radius:5px;background:#ffffff;color:var(--text)}
+    [data-testid='stNumberInput'] input,[data-testid='stTextInput'] input,[data-testid='stSelectbox'] input{border:1px solid var(--line);border-radius:5px;background:#ffffff;color:var(--text)}
+    [data-testid='stNumberInput'] label,[data-testid='stSlider'] label,[data-testid='stTextInput'] label,[data-testid='stSelectbox'] label,[data-testid='stCheckbox'] label,[data-testid='stRadio'] label{color:var(--text)!important;font-weight:600!important}
+    [data-testid='stNumberInput'] [data-testid='stWidgetLabel'],[data-testid='stSlider'] [data-testid='stWidgetLabel'],[data-testid='stTextInput'] [data-testid='stWidgetLabel'],[data-testid='stSelectbox'] [data-testid='stWidgetLabel']{color:var(--text)!important}
     [data-testid='stAlert']{border-radius:7px}.stMarkdown,.stCaption{color:var(--muted)}
     .stPlotlyChart > div{background:#ffffff;border:1px solid var(--line);border-radius:12px;box-shadow:0 8px 20px #146fae12}
     .js-plotly-plot .legend .scrollbox,.js-plotly-plot .legendtext,.js-plotly-plot .xtitle,.js-plotly-plot .ytitle,.js-plotly-plot .xaxislayer-above text,.js-plotly-plot .yaxislayer-above text,.js-plotly-plot .g-xtitle,.js-plotly-plot .g-ytitle{fill:#12344f!important;color:#12344f!important}
     .js-plotly-plot .svg-container{background:transparent!important}
+    .stApp, .stApp p, .stApp div, .stApp span, .stApp label{color:var(--text)}
     </style>
     """,
     unsafe_allow_html=True,
