@@ -41,10 +41,54 @@ st.markdown(
     .interval{border-radius:5px;padding:.45rem .35rem;margin-top:.7rem;font-size:.85rem;color:var(--text)}.interval span{display:block;color:var(--muted);font-size:.72rem;margin-bottom:.15rem}.pi90{background:#dceefa}.pi95{background:#edf3f7}.width-note{color:var(--muted);font-size:.72rem;margin-top:.65rem}
     [data-testid='stNumberInput'] input{border:1px solid var(--line);border-radius:5px;background:#ffffff;color:var(--text)}
     [data-testid='stAlert']{border-radius:7px}.stMarkdown,.stCaption{color:var(--muted)}
+    .stPlotlyChart > div{background:#ffffff;border:1px solid var(--line);border-radius:12px;box-shadow:0 8px 20px #146fae12}
+    .js-plotly-plot .legend .scrollbox,.js-plotly-plot .legendtext,.js-plotly-plot .xtitle,.js-plotly-plot .ytitle,.js-plotly-plot .xaxislayer-above text,.js-plotly-plot .yaxislayer-above text,.js-plotly-plot .g-xtitle,.js-plotly-plot .g-ytitle{fill:#12344f!important;color:#12344f!important}
+    .js-plotly-plot .svg-container{background:transparent!important}
     </style>
     """,
     unsafe_allow_html=True,
 )
+
+
+def apply_plotly_theme(fig, *, title=None, xaxis_title=None, yaxis_title=None, height=360):
+    fig.update_layout(
+        template=None,
+        paper_bgcolor="#ffffff",
+        plot_bgcolor="#f7fbff",
+        font=dict(color="#12344f", family="DM Sans, sans-serif"),
+        title=dict(text=title or fig.layout.title.text, font=dict(color="#0b4776", size=18, family="Space Grotesk, sans-serif")),
+        legend=dict(
+            bgcolor="rgba(255,255,255,0.94)",
+            bordercolor="#c5ddea",
+            borderwidth=1,
+            font=dict(color="#12344f", size=12),
+            title_font=dict(color="#12344f", size=12),
+            x=1.02,
+            xanchor="left",
+            y=1,
+            yanchor="top",
+        ),
+        hoverlabel=dict(bgcolor="#ffffff", font=dict(color="#12344f")),
+        height=height,
+        margin=dict(l=60, r=90, t=55, b=55),
+        xaxis=dict(
+            title=dict(text=xaxis_title or fig.layout.xaxis.title.text, font=dict(color="#12344f", family="DM Sans, sans-serif")),
+            tickfont=dict(color="#12344f"),
+            gridcolor="#dfeaf5",
+            zerolinecolor="#dfeaf5",
+            linecolor="#93a9bc",
+            mirror=True,
+        ),
+        yaxis=dict(
+            title=dict(text=yaxis_title or fig.layout.yaxis.title.text, font=dict(color="#12344f", family="DM Sans, sans-serif")),
+            tickfont=dict(color="#12344f"),
+            gridcolor="#eaf2fa",
+            zerolinecolor="#eaf2fa",
+            linecolor="#93a9bc",
+            mirror=True,
+        ),
+    )
+    return fig
 
 
 @st.cache_data
@@ -143,7 +187,15 @@ with tab_predictor:
             uq_figure.add_trace(go.Scatter(x=[position, position], y=[result["pi95_lower"][0], result["pi95_upper"][0]], mode="lines", line=dict(color="#8ea8b9", width=12), name="95% PI" if is_first_model else None, showlegend=is_first_model))
             uq_figure.add_trace(go.Scatter(x=[position, position], y=[result["pi90_lower"][0], result["pi90_upper"][0]], mode="lines", line=dict(color="#2587c4", width=8), name="90% PI" if is_first_model else None, showlegend=is_first_model))
             uq_figure.add_trace(go.Scatter(x=[position], y=[predictions[model]], mode="markers", marker=dict(color="#f0a35b", size=10), name="Prediction" if is_first_model else None, showlegend=is_first_model))
-        uq_figure.update_layout(title="Prediction and uncertainty by model", template="plotly_dark", height=360, paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="#102131", xaxis=dict(tickmode="array", tickvals=list(model_positions), ticktext=MODEL_ORDER, title="Model"), yaxis_title=f"N_test ({bundle.get('target_unit', '')})", margin=dict(l=55,r=20,t=60,b=45))
+        uq_figure.update_xaxes(tickmode="array", tickvals=list(model_positions), ticktext=MODEL_ORDER, title_text="Model", tickfont=dict(color="#12344f"), gridcolor="#dfeaf5", zerolinecolor="#dfeaf5")
+        uq_figure.update_yaxes(title_text=f"N_test ({bundle.get('target_unit', '')})", tickfont=dict(color="#12344f"), gridcolor="#eaf2fa", zerolinecolor="#eaf2fa")
+        uq_figure = apply_plotly_theme(
+            uq_figure,
+            title="Prediction and uncertainty by model",
+            xaxis_title="Model",
+            yaxis_title=f"N_test ({bundle.get('target_unit', '')})",
+            height=360,
+        )
         st.plotly_chart(uq_figure, use_container_width=True)
 
     st.markdown('<div class="section">Variable Impact Analysis</div>', unsafe_allow_html=True)
@@ -161,7 +213,14 @@ with tab_predictor:
                 figure.add_trace(go.Scatter(x=np.r_[data["x"], data["x"][::-1]], y=np.r_[data["pi90_upper"], data["pi90_lower"][::-1]], fill="toself", line=dict(width=0), fillcolor="#2587c4", opacity=.3, name="90% PI"))
             figure.add_trace(go.Scatter(x=data["x"], y=data["prediction"], mode="lines+markers", name=f"{selected_model} prediction", line=dict(color="#2587c4", width=3), marker=dict(size=4)))
             figure.add_trace(go.Scatter(x=[baseline[selected_feature]], y=[float(predict_all(bundle, np.asarray([[baseline[feature] for feature in bundle["feature_order"]]], dtype=float))[selected_model][0])], mode="markers", name="Current setting", marker=dict(symbol="star", size=15, color="#ed7650", line=dict(color="#fff", width=1))))
-            figure.update_layout(title=f"Variable impact: {selected_feature}", xaxis_title=selected_feature, yaxis_title=f"Predicted {bundle['target_name']} ({bundle.get('target_unit', '')})", template="plotly_dark", height=500, paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="#102131", font=dict(color="#f5f8fb"), hovermode="x unified", margin=dict(l=55, r=25, t=65, b=55))
+            figure.update_layout(hovermode="x unified")
+            figure = apply_plotly_theme(
+                figure,
+                title=f"Variable impact: {selected_feature}",
+                xaxis_title=selected_feature,
+                yaxis_title=f"Predicted {bundle['target_name']} ({bundle.get('target_unit', '')})",
+                height=500,
+            )
             st.plotly_chart(figure, use_container_width=True)
             st.caption("The selected variable is scanned from its validated minimum to maximum. All other variables remain fixed at the current slider setting.")
 
