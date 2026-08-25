@@ -137,7 +137,7 @@ with tab_predictor:
                 if slider_key not in st.session_state:
                     st.session_state[slider_key] = st.session_state[manual_key]
                 st.number_input(
-                    f"{feature} value",
+                    feature,
                     min_value=low,
                     max_value=high,
                     key=manual_key,
